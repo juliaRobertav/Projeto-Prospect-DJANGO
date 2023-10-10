@@ -1,0 +1,153 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/Cons_Cliente_Lista.css' %}">
+    <title>Document</title>
+</head>
+<header class="login">
+    <div class="fundo_menu">
+        <div class="logo_senai">
+             <a href="/"><img src="{% static 'imagens/logo_senai.png' %}" /></a>
+        </div>
+        <div class="nome_sistema">
+             Programação Web Back End<br>
+             Sistema de atendimento ao cliente
+        </div>
+        <div class="botao_login">
+            <button class="btn btn_login">Login</button>
+        </div> 
+    </div>
+</header> 
+
+
+<nav class="menu">
+    <ul>
+        {% if user.is_authenticated %}
+        <li><a href="Cadastros">Cadastros</a>
+            <ul>
+                <li><a href="Cad_Cliente.html">Clientes</a></li>
+                <li><a href="Departamentos">Departamentos</a></li>
+                <li><a href="Atendentes">Atendentes</a></li>
+                <li><a href="Situações">Situações</a></li>
+            </ul>
+        </li>    
+        <li><a href="Registrar">Registrar Atendimento</a></li>
+        <li><a href="Consultar">Consultar Atendimento</a></li>
+        <li><a href="Relatorios">Relatórios</a></li>
+        <li><a href="TESTE.html">TESTES</a></li>
+        <li> | Usuário logado: {{usuario_logado}}</a></li>
+        {% endif %}
+    </ul> 
+</nav> 
+     
+<body>
+    <div class="principal">
+    <div class="container">
+        <section class="enquadramento">
+            <h1> Consultar Cliente</h1>
+        </section>
+        
+        {% if messages %}
+            <ul class="mensagem_do_servidor" style="background: #7d7f81; padding: 24px; text-align:center; color: #fff;">
+                {% for mensagem in messages %}
+
+                      <li style="list-style: none;" {% if mensagem.tags %}class="alert alert-{{message.tags}}"{% endif %}>{{mensagem}}</li>
+
+                {% endfor %}
+            </ul>
+        {% endif %}
+        
+        
+        
+        <!-- https://www.w3schools.com/cssref/index.php -->
+        
+        <form id="form" class="form" method="POST" action="{% url 'cons_cliente' %}">{% csrf_token %}
+
+            <div class="form-content">
+                <label for="cliente">Cliente</label>
+                <input type="text" id="cliente" name="cliente" placeholder="Digite o nome do Cliente desejado" />
+            </div>
+            <div class="form-content">
+                <label for="telefone">Telefone</label>
+                <input type="text" id="telefone" name="telefone" placeholder="Digite o telefone do Cliente desejado" />
+            </div>
+            <div class="form-content">
+                <label for="email">E-Mail</label>
+                <input type="text" id="email" name="email" placeholder="Digite o email do Cliente desejado" />
+            </div>
+
+                
+                
+                <div class="botoes">
+                    <div class="botao_consultar">
+                        <button id="btnConsultar" type=submit class="btn_cons_cancel btn_consultar">Consultar</button>
+                    </div>
+<!--                    <div class="botao_cancelar">-->
+
+<!--                        <button id="btnCancelar"  class="btn_cons_cancel btn_cancelar">Cancelar</button>-->
+
+<!--                    </div>-->
+
+                </div>
+        </form>
+        <hr>
+        <table>
+            <tr>
+                <th>Cliente</th>
+                <th>Telefone</th>
+                <th>E-Mail</th>
+                <th>Observações</th>
+                <th>Editar</th>
+                <th>Excluir</th>
+            </tr>
+            {% for usuario in page.object_list %}
+            <tr>
+                <td>{{usuario.nome}}</td>
+                <td>{{usuario.telefone}}</td>
+                <td>{{usuario.email}}</td>
+                <td>{{usuario.observacao}}</td>
+                <td><a href="/edit_cliente/{{igs.id}}"><i class="fa-solid fa-pen-to-square"></i></a></td>
+                <td><a href="/excluir_cliente/{{igs.id}}"><i class="fa-solid fa-trash"></i></a></td>
+            </tr>
+            {% endfor %}
+        </table>
+
+         <div class="page-links">
+            {% if page.has_previous %}
+                <a href="{% url 'cons_cliente' %}?page={{page.previous_page_number}}">Anterior</a>
+            {% endif %}
+
+            {% if page.has_next %}
+                <a href="{% url 'cons_cliente' %}?page={{page.next_page_number}}">Próximo</a>
+            {% endif %}
+        </div>
+
+
+    </div>    
+    </div>
+
+<!--<script src="{% static 'js/script.js' %}"></script>-->
+<script src="https://kit.fontawesome.com/c9237383f1.js" crossorigin="anonymous"></script>
+
+</body>
+
+
+
+<footer class="rodape">
+    <div class="fundo_menu">
+        
+        <div class="rodape1">
+            Escola e Faculdade de Tecnologia Senai "Roberto Mange"<br>
+            Curso de Análise e Desenvolvimento de Sistemas.<br>
+         
+        </div>  
+        
+        
+    </div>
+</footer> 
+
+
+</html>
